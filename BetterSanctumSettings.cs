@@ -47,6 +47,7 @@ public class BetterSanctumSettings : ISettings
         "Armourer's Scraps",
         "Orbs of Transmutation",
         "Orbs of Augmentation",
+        "Fracturing Orbs",
     };
 
     public readonly IReadOnlyList<string> CurrencyDuplicate = new List<string>
@@ -56,6 +57,8 @@ public class BetterSanctumSettings : ISettings
         "Mirror of kalandra",
         "Mirror",
         "Mirrors",
+        "Fracturing Orb",
+        "Fracturing Orbs",
     };
 
     private static readonly IReadOnlyList<string> RoomTypes = new List<string>
@@ -322,6 +325,7 @@ public class ProfileContent
         ["Veiled Chaos Orbs"] = 2,
         ["Orbs of Annulment"] = 2,
         ["Exalted Orbs"] = 2,
+        ["Fracturing Orbs"] = 1,
     };
 
     public Dictionary<string, int> RoomTiers = new()
