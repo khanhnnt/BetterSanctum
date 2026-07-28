@@ -48,7 +48,7 @@ public class BetterSanctumSettings : ISettings
         "Orbs of Transmutation",
         "Orbs of Augmentation",
         "Fracturing Orbs",
-        "Volatile Vaal Orb",
+        "Volatile Vaal Orbs",
     };
 
     public readonly IReadOnlyList<string> CurrencyDuplicate = new List<string>
