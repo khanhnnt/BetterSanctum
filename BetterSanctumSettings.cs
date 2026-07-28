@@ -329,6 +329,7 @@ public class ProfileContent
         ["Orbs of Annulment"] = 2,
         ["Exalted Orbs"] = 2,
         ["Fracturing Orbs"] = 1,
+        ["Volatile Vaal Orbs"] = 1,
     };
 
     public Dictionary<string, int> RoomTiers = new()
