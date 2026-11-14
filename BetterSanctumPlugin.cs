@@ -101,6 +101,14 @@ public class BetterSanctumPlugin : BaseSettingsPlugin<BetterSanctumSettings>
                 var roomLayer = roomsByLayer[layerIndex];
                 for (var roomIndex = 0; roomIndex < roomLayer.Count; roomIndex++)
                 {
+                    // RoomLayout can be incomplete while the Sanctum window is loading,
+                    // and some versions expose fewer entries than RoomsByLayer.
+                    if (layerIndex >= floorWindow.FloorData.RoomLayout.Length ||
+                        roomIndex >= floorWindow.FloorData.RoomLayout[layerIndex].Length)
+                    {
+                        continue;
+                    }
+
                     var room = roomLayer[roomIndex];
                     (List<int> CurrencyTier, int? RoomTier, int? AfflictionTier) thisRoomData = (
                         room.GetRoomsWithOrder().Select(x => Settings.GetCurrencyTier(x.room.CurrencyName, x.order)).ToList(),
@@ -116,7 +124,8 @@ public class BetterSanctumPlugin : BaseSettingsPlugin<BetterSanctumSettings>
                             (not null, { } o) => Settings.GetAfflictionTier(o)
                         }
                     );
-                    var connections = floorWindow.FloorData.RoomLayout[layerIndex][roomIndex];
+                    var connections = floorWindow.FloorData.RoomLayout[layerIndex][roomIndex]
+                        .Where(index => index >= 0 && index < roomsByLayer[layerIndex + 1].Count);
                     var connectedRoomData = connections.Select(x => tierMap.GetValueOrDefault((layerIndex + 1, x)))
                         .Where(x => x != default).ToList();
                     if (connectedRoomData.Any())
@@ -162,9 +171,13 @@ public class BetterSanctumPlugin : BaseSettingsPlugin<BetterSanctumSettings>
             {
                 var room = roomLayer[roomIndex];
                 var fightRoomId = room.Data.FightRoom?.RoomType?.Id;
-                if (fightRoomId != null && Settings.ConnectionLineThickness > 0)
+                if (fightRoomId != null && Settings.ConnectionLineThickness > 0 &&
+                    layerIndex + 1 < roomsByLayer.Count &&
+                    layerIndex < floorWindow.FloorData.RoomLayout.Length &&
+                    roomIndex < floorWindow.FloorData.RoomLayout[layerIndex].Length)
                 {
-                    var connections = floorWindow.FloorData.RoomLayout[layerIndex][roomIndex];
+                    var connections = floorWindow.FloorData.RoomLayout[layerIndex][roomIndex]
+                        .Where(index => index >= 0 && index < roomsByLayer[layerIndex + 1].Count);
                     var connectedRoomData = connections.Select(index => (index, tierMap.GetValueOrDefault((layerIndex + 1, index))))
                         .Where(x => x.Item2 != default).ToList();
                     if (connectedRoomData.Any())
